@@ -10,9 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
-public class RegisterActivity extends ActionBarActivity {
+public class RegisterActivity extends ActionBarActivity implements NewAsyncTask.OnPostExecuteListener, NewAsyncTaskInsere.OnPostExecuteListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +50,32 @@ public class RegisterActivity extends ActionBarActivity {
                 prefsEditor.commit();
 
 
+               /* NewAsyncTask async = new NewAsyncTask(RegisterActivity.this, RegisterActivity.this);
+                try {
+                    URL url = new URL("http://146.164.34.73/WebserviceWorkshop/Service.php?servico=selecionaPessoa");
+                    async.execute(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } */
+
+                Gson gson = new Gson();
+                String pessoaString = gson.toJson(pessoa);
+                NewAsyncTaskInsere async = new NewAsyncTaskInsere(RegisterActivity.this, RegisterActivity.this);
+                try {
+                    URL url = new URL("http://146.164.34.73/WebserviceWorkshop/Service.php?servico=inserePessoa&objeto=" + pessoaString);
+                    async.execute(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
 
 
-                /*Gson gson = new Gson()*/
+                /*Gson gson = new Gson()
 
 
                 Intent intent = new Intent(RegisterActivity.this, ResultActivity.class);
 
                 intent.putExtra("pessoa", pessoa);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
 
@@ -81,5 +104,10 @@ public class RegisterActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPostExecute(String result) {
+        Toast.makeText(RegisterActivity.this, result, Toast.LENGTH_LONG).show();
     }
 }

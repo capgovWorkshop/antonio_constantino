@@ -16,4 +16,5 @@
     <string name="email">emial: </string>
     <string name="confirmar">confirmar</string>
     <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_post_service">PostServiceActivity</string>
 </resources>
